@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generate Unique Barcode</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.6/JsBarcode.all.min.js" 
+          integrity="sha512-k2wo/BkbloaRU7gc/RkCekHr4IOVe10kYxJ/Q8dRPl7u3YshAQmg3WfZtIcseEk+nGBdK03fHBeLgXTxRmWCLQ==" 
+          crossorigin="anonymous" 
+          referrerpolicy="no-referrer"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    #barcode {
+      margin: 20px 0;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Unique 10-Digit Barcode Generator</h1>
+  <button onclick="generateBarcode()">Generate Barcode</button>
+  <div id="barcode-container">
+    <svg id="barcode"></svg>
+  </div>
+
+  <script>
+    function generateUniqueCode() {
+      return Math.floor(1000000000 + Math.random() * 9000000000).toString(); // Generates 10-digit unique code
+    }
+
+    function generateBarcode() {
+      const uniqueCode = generateUniqueCode();
+      JsBarcode("#barcode", uniqueCode, {
+        format: "CODE128",
+        lineColor: "#000",
+        width: 4, // Lebar tiap garis diperbesar
+        height: 100, // Tinggi barcode diperbesar
+        displayValue: true,
+      });
+    }
+  </script>
+</body>
+</html>
