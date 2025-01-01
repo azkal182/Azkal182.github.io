@@ -38,6 +38,8 @@
   <button id="download-btn" onclick="downloadBarcode()">Download Barcode</button>
 
   <script>
+    let generatedCode = ""; // Variabel untuk menyimpan kode yang dihasilkan
+
     function generateUniqueCode() {
       const randomPart = Math.floor(1000 + Math.random() * 9000); // 4-digit random number
       const timestampPart = Date.now().toString().slice(-6); // Last 6 digits of timestamp
@@ -46,10 +48,10 @@
 
     function generateBarcode() {
       try {
-        const uniqueCode = generateUniqueCode(); // Get unique 10-digit code
-        console.log("Generated Code:", uniqueCode);
+        generatedCode = generateUniqueCode(); // Simpan kode yang dihasilkan
+        console.log("Generated Code:", generatedCode);
 
-        JsBarcode("#barcode", uniqueCode, {
+        JsBarcode("#barcode", generatedCode, {
           format: "CODE128",
           lineColor: "#000",
           width: 4, // Adjust width for longer barcode
@@ -66,6 +68,10 @@
 
     function downloadBarcode() {
       try {
+        if (!generatedCode) {
+          throw new Error("No barcode generated yet.");
+        }
+
         const svg = document.getElementById("barcode");
         if (!svg) {
           throw new Error("Barcode element not found.");
@@ -81,9 +87,9 @@
 
         const link = document.createElement("a");
         link.href = url;
-        link.download = "barcode.svg"; // Default file name
+        link.download = `${generatedCode}.svg`; // Gunakan kode yang dihasilkan sebagai nama file
         link.click();
-        console.log("Download triggered.");
+        console.log(`Download triggered with filename: ${generatedCode}.svg`);
 
         URL.revokeObjectURL(url); // Clean up the URL object
         console.log("Blob URL revoked.");
