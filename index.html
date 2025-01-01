@@ -21,15 +21,21 @@
       padding: 10px 20px;
       font-size: 16px;
       cursor: pointer;
+      margin: 10px;
+    }
+    #download-btn {
+      display: none;
     }
   </style>
 </head>
 <body>
   <h1>Unique 10-Digit Barcode Generator</h1>
   <button onclick="generateBarcode()">Generate Barcode</button>
+
   <div id="barcode-container">
     <svg id="barcode"></svg>
   </div>
+  <button id="download-btn" onclick="downloadBarcode()">Download Barcode</button>
 
   <script>
     function generateUniqueCode() {
@@ -39,14 +45,51 @@
     }
 
     function generateBarcode() {
-      const uniqueCode = generateUniqueCode(); // Get unique 10-digit code
-      JsBarcode("#barcode", uniqueCode, {
-        format: "CODE128",
-        lineColor: "#000",
-        width: 4, // Adjust width for longer barcode
-        height: 100, // Adjust height for visibility
-        displayValue: true,
-      });
+      try {
+        const uniqueCode = generateUniqueCode(); // Get unique 10-digit code
+        console.log("Generated Code:", uniqueCode);
+
+        JsBarcode("#barcode", uniqueCode, {
+          format: "CODE128",
+          lineColor: "#000",
+          width: 4, // Adjust width for longer barcode
+          height: 100, // Adjust height for visibility
+          displayValue: true,
+        });
+        console.log("Barcode successfully generated.");
+
+        document.getElementById("download-btn").style.display = "inline-block"; // Show download button
+      } catch (error) {
+        console.error("Error generating barcode:", error);
+      }
+    }
+
+    function downloadBarcode() {
+      try {
+        const svg = document.getElementById("barcode");
+        if (!svg) {
+          throw new Error("Barcode element not found.");
+        }
+
+        const serializer = new XMLSerializer();
+        const source = serializer.serializeToString(svg);
+        console.log("Serialized SVG Source:", source);
+
+        const svgBlob = new Blob([source], { type: "image/svg+xml;charset=utf-8" });
+        const url = URL.createObjectURL(svgBlob);
+        console.log("Blob URL created:", url);
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "barcode.svg"; // Default file name
+        link.click();
+        console.log("Download triggered.");
+
+        URL.revokeObjectURL(url); // Clean up the URL object
+        console.log("Blob URL revoked.");
+      } catch (error) {
+        console.error("Error during download:", error);
+      }
     }
   </script>
 </body>
