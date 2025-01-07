@@ -57,6 +57,7 @@
           width: 4, // Adjust width for longer barcode
           height: 100, // Adjust height for visibility
           displayValue: true,
+          useViewBox: true,
         });
         console.log("Barcode successfully generated.");
 
@@ -76,6 +77,10 @@
         if (!svg) {
           throw new Error("Barcode element not found.");
         }
+        
+         // Atur ukuran SVG dalam cm
+        svg.setAttribute("width", "1.85cm");
+        svg.setAttribute("height", "0.7cm");
 
         const serializer = new XMLSerializer();
         const source = serializer.serializeToString(svg);
